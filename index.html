@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>WinNotes</title>
+  <meta name="description" content="Simple note keeping applications based on Casey Trimm's Window jQuery UI Plugin.">
+  <meta name="author" content="Casey Trimm">
+
+  <link rel="stylesheet" href="css/style.css?v=1">
+  <link rel="stylesheet" href="css/redmond/jquery-ui-1.8.custom.css" />
+  <link rel="stylesheet" href="css/cle/jquery.cleditor.css" />
+  
+  <script src="js/modernizr-1.5.min.js"></script>
+</head>
+<body>
+    <div id='form' class='ui-widget-content ui-corner-all miniWin-shadow'>
+        <label for='title'>Title:</label><br />
+	    <input type='text' id='title' />
+	    <br />
+	    <label for='note'>Note:</label><br />
+	    <textarea id='note'></textarea>
+        <br />
+        <button>Create Note</button>
+        
+        <span id='showPane'></span>
+    </div>
+    
+    <div id="taskbar"><div id='taskbar_bg' class='ui-widget-header ui-corner-all'></div></div>
+
+    <!-- Grab Google CDN's jQuery. fall back to local if necessary -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script>!window.jQuery && document.write('<script src="js/jquery-1.4.2.min.js"><\/script>')</script>
+    
+    <!-- Grab Google CDN's jQuery UI. fall back to local if necessary -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js"></script>
+    <script>!window.jQuery && document.write('<script src="js/jquery-ui.js"><\/script>')</script>
+  
+    <script src="js/plugins/jquery.cleditor.min.js"></script>
+    <script src="js/cookie.js"></script>
+    <script src='js/plugins/jquery.ui.miniwin.js'></script>
+    <script src='js/plugins/jquery.ui.icon.js'></script>
+    <script src="js/plugins.js?v=1"></script>
+    <script src="js/script.js?v=1"></script>
+
+
+    <!--[if lt IE 7 ]>
+        <script src="js/dd_belatedpng.js?v=1"></script>
+    <![endif]-->
+</body>
+</html>
