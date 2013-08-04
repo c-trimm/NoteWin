@@ -2,103 +2,123 @@
 // Author: Casey Trimm
 // Created: July 2010
 $(document).ready(function() {
-    var formBox = $("#form"),
-        title = $("#title"), 
-        note = $("#note"),
-        submit = $("#form button"),
-        dToggle = $("#showPane"),
-        fBoxPos, editor; 
-    
-    // Default position of Form Box
-    fBoxPos = {
-        state : 0, // 1 for showing, 0 for hidden
-        showing : {
-            top : 20,
-            left : 20
-        },
-        hidden : {
-            top : (0 - (parseInt(formBox.height()) + 40)) + 20,
-        	left : (0 - (parseInt(formBox.width()) + 40)) + 25
-        }
-    };
-    
-	formBox.css(fBoxPos.hidden);
-	editor = $("#note").cleditor({width: "100%"});
-    submit.button();
-    dToggle.icon({icon : "circle-plus"});
-	
-	dToggle.click(function(e){
-		if (fBoxPos.state = !fBoxPos.state) {
-			formBox.animate(fBoxPos.showing);
-		}
-		else {
-			formBox.animate(fBoxPos.hidden);
-		}
-	});
-	
-	submit.click(function(e) {
-        var newWin;
+    var $formBox, $title, $note, $submit, $dToggle, title, note, editor, windowStates; 
 
-		if (note.val() !== "") {
-			if (title.val() === "")
-				title.val("Untitled");
-			
-			newWin = $("<div title='" + title.val() + "'>" + note.val() + "</div>").miniWin();
-			
-			newWin.bind("saveState",function(e) {
-				saveWinState($(this).miniWin("getState"),$(this).miniWin("getID"));
-			});
-			
-			newWin.bind("close", function(e) {
-				removeWin($(this).miniWin("getID"));
-			});
-			
-			newWin.miniWin("open");
-			
-			title.val("");
-			note.val("");
-			
-			formBox.animate({
-				top : (0 - (parseInt(formBox.height()) + 40)) + 25,
-				left : (0 - (parseInt(formBox.width()) + 40)) + 25
-			});
-			
-			$("#showPane").data("out",false);
-		}
-		
+    function init() {
+	    $formBox = $("#form");
+	    $title = $("#title");
+	    $note = $("#note");
+	    $submit = $("#form button");
+	    $dToggle = $("#showPane");
+	    
+	    $formBox.data("showing", true);
+		editor = $("#note").cleditor({width: "100%"});
+	    $submit.button();
+	    $dToggle.icon({icon : "circle-plus"});
 
-	});
-	
-	var windowStates = new cookieObj("iceberg");
-	log(windowStates);
-	for (winID in windowStates.cookie) {
-		var newWin = $("<div />");
-		
-		newWin.miniWin({uniqueID : winID, state: windowStates.cookie[winID]});
-		
-		newWin.bind("saveState",function(e) {
-			saveWinState($(this).miniWin("getState"),$(this).miniWin("getID"));
-		});
-		
-		newWin.bind("close", function(e) {
-			removeWin($(this).parent().attr("id"));
-		});
-		
-		newWin.miniWin("open");
-		
+		$dToggle.click(toggleForm);
+		$submit.click(submitForm);
+
+		for (var winID in localStorage) {
+			if (localStorage.hasOwnProperty(winID)) {
+				createWindow({uniqueID: winID, state: JSON.parse(localStorage[winID])});
+			}
+		}
 	}
+
+	function createWindow(attrs) {
+    	var $newWin, title, note, uniqueID, state, existing;
+
+    	if (!attrs) {
+    		throw new Error("Window attributes not supplied!");
+    	}
+
+    	existing = null;
+    	title = attrs.title;
+    	note = attrs.note;
+    	uniqueID = attrs.uniqueID
+    	state = attrs.state;
+
+    	// Create new element and bind events
+    	$newWin = $("<div />");
+		$newWin.bind("saveState", saveWindowState);
+		$newWin.bind("close", removeWindowState);
+
+    	if (state && uniqueID) {
+    		existing = {
+    			uniqueID: uniqueID,
+    			state: state
+    		}
+    	}
+
+		// Create window element
+		$newWin.attr("title", title);
+		$newWin.html(note);
+
+		// Apply plugin
+		$newWin.miniWin(existing);
+		$newWin.miniWin("open");
+
+		return $newWin;
+	}
+
+    function toggleForm() {
+    	var animateTo, showing;
+
+    	showing = $formBox.data("showing");
+    	animateTo = { top : 20, left : 20 };
+
+    	if (showing) {
+			animateTo = {
+	    		top : (0 - (parseInt($formBox.height()) + 40)) + 25,
+				left : (0 - (parseInt($formBox.width()) + 40)) + 25
+	    	};
+		}
+
+		$formBox.animate(animateTo);
+		$formBox.data("showing", !showing);
+    }
+
+    function submitForm() {
+        var $newWin, title, note;
+
+        title = ($title.val()) ? $title.val() : "Untitled";
+        note = $note.val();
+
+		if (note === "") {
+			return alert("You must enter note text!");
+		}
+
+		// Create a new note window, add bindings, and open it
+		$newWin = createWindow({
+			title: title,
+			note: note
+		});
+		saveWindowState.call($newWin);
+		
+		// Hide the form
+		toggleForm();
+
+		// Clear the form
+		$title.val("");
+		$note.cleditor()[0].clear();
+	}
+
+	function saveWindowState() {
+		var winID = $(this).miniWin("getID");
+		var state = $(this).miniWin("getState");
+		localStorage[winID] = JSON.stringify(state);
+	}
+
+	function removeWindowState() {
+		var winID = $(this).miniWin("getID");
+		localStorage.removeItem(winID);
+	}
+
+	init();
+	toggleForm();
 });
 
 
-function saveWinState(state,winID) {
-	var winStates = new cookieObj("iceberg");
-	winStates.cookie[winID] = state;
-	winStates.save();
-}
 
-function removeWin(winID) {
-	var winStates = new cookieObj("iceberg");
-	delete winStates.cookie[winID];
-	winStates.save();
-}
 

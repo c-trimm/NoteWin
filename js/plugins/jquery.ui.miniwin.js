@@ -165,17 +165,14 @@ window.log = function(){
 				});
 
 				el.bind("normalize", function() {
-					self._updateState();
 					self._saveState();
 				});
 
 				el.bind("dialogdragstop", function() {
-					self._updateState();
 					self._saveState();
 				});
 
 				el.bind("dialogresizestop", function() {
-					self._updateState();
 					self._saveState();
 				});
 		},
@@ -318,6 +315,7 @@ window.log = function(){
 		},
 		
 		getState: function() {
+			this._updateState();
 			return this.state;
 		},
 		
@@ -336,6 +334,7 @@ window.log = function(){
 		},
 		
 		_saveState: function() {
+			this._updateState();
 			this.element.trigger("saveState");
 		},
 		
