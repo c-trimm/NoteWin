@@ -1,7 +1,6 @@
 // NoteWin
 // Author: Casey Trimm
 // Created: July 2010
-//test
 $(document).ready(function() {
     var formBox = $("#form"),
         title = $("#title"), 
