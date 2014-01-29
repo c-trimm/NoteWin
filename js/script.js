@@ -2,7 +2,7 @@
 // Author: Casey Trimm
 // Created: July 2010
 $(document).ready(function() {
-    var $formBox, $title, $note, $submit, $dToggle, title, note, editor, windowStates; 
+    var $formBox, $title, $note, $submit, $dToggle, $clearBtn, title, note, editor, windowStates; 
 
     function init() {
 	    $formBox = $("#form");
@@ -10,6 +10,7 @@ $(document).ready(function() {
 	    $note = $("#note");
 	    $submit = $("#form button");
 	    $dToggle = $("#showPane");
+	    $clearBtn = $("#clear-form");
 	    
 	    $formBox.data("showing", true);
 		editor = $("#note").cleditor({width: "100%"});
@@ -18,12 +19,15 @@ $(document).ready(function() {
 
 		$dToggle.click(toggleForm);
 		$submit.click(submitForm);
+		$clearBtn.click(clearForm);
 
 		for (var winID in localStorage) {
 			if (localStorage.hasOwnProperty(winID)) {
 				createWindow({uniqueID: winID, state: JSON.parse(localStorage[winID])});
 			}
 		}
+
+		//toggleForm();
 	}
 
 	function createWindow(attrs) {
@@ -40,9 +44,9 @@ $(document).ready(function() {
     	state = attrs.state;
 
     	// Create new element and bind events
-    	$newWin = $("<div />");
-		$newWin.bind("saveState", saveWindowState);
-		$newWin.bind("close", removeWindowState);
+    	$newWin = $("<div />")
+			.bind("saveState", saveWindowState)
+			.bind("close", removeWindowState);
 
     	if (state && uniqueID) {
     		existing = {
@@ -55,24 +59,29 @@ $(document).ready(function() {
 		$newWin.attr("title", title);
 		$newWin.html(note);
 
-		// Apply plugin
-		$newWin.miniWin(existing);
-		$newWin.miniWin("open");
+		// Apply plugin and open window
+		$newWin.miniWin(existing).miniWin("open");
 
 		return $newWin;
 	}
 
     function toggleForm() {
-    	var animateTo, showing;
+    	var animateTo, showing, $showPane;
 
     	showing = $formBox.data("showing");
     	animateTo = { top : 20, left : 20 };
+    	$showPane = $("#showPane");
 
     	if (showing) {
 			animateTo = {
 	    		top : (0 - (parseInt($formBox.height()) + 40)) + 25,
 				left : (0 - (parseInt($formBox.width()) + 40)) + 25
 	    	};
+
+	    	$showPane.icon("option", "icon", "circle-plus");
+		}
+		else {
+			$showPane.icon("option", "icon", "closethick");
 		}
 
 		$formBox.animate(animateTo);
@@ -99,9 +108,7 @@ $(document).ready(function() {
 		// Hide the form
 		toggleForm();
 
-		// Clear the form
-		$title.val("");
-		$note.cleditor()[0].clear();
+		clearForm();
 	}
 
 	function saveWindowState() {
@@ -115,10 +122,10 @@ $(document).ready(function() {
 		localStorage.removeItem(winID);
 	}
 
+	function clearForm() {
+		$title.val("");
+		$note.cleditor()[0].clear();
+	}
+
 	init();
-	toggleForm();
 });
-
-
-
-

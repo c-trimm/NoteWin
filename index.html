@@ -17,15 +17,20 @@
 </head>
 <body>
     <div id='form' class='ui-widget-content ui-corner-all miniWin-shadow'>
-        <label for='title'>Title:</label><br />
+      <h1>Add Note</h1>
+      <label for='title'>Title:</label><br />
 	    <input type='text' id='title' />
 	    <br />
-	    <label for='note'>Note:</label><br />
+	    <label for='note'>Note:</label>
+      <!-- <a href="#" id='save-template'>Save as Template</a> -->
+      <br />
 	    <textarea id='note'></textarea>
-        <br />
-        <button>Create Note</button>
-        
-        <span id='showPane'></span>
+      <a href="#" id='clear-form'>Clear Form</a>
+      <!-- <a href="#" id='load-template'>Load Template</a> -->
+      <br />
+      <span class='clearfix'></span>
+      <button>Create Note</button>
+      <span id='showPane'></span>
     </div>
     
     <div id="taskbar"><div id='taskbar_bg' class='ui-widget-header ui-corner-all'></div></div>
@@ -39,11 +44,9 @@
     <script>!window.jQuery && document.write('<script src="js/jquery-ui.js"><\/script>')</script>
   
     <script src="js/plugins/jquery.cleditor.min.js"></script>
-    <script src="js/cookie.js"></script>
     <script src='js/plugins/jquery.ui.miniwin.js'></script>
     <script src='js/plugins/jquery.ui.icon.js'></script>
     <script src="js/script.js?v=1"></script>
-
 
     <!--[if lt IE 7 ]>
         <script src="js/dd_belatedpng.js?v=1"></script>

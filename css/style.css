@@ -2,18 +2,27 @@
     Primary Styles
     Author: Casey Trimm
 */
+
+body {
+	background-image: url('../img/white_tiles.png');
+}
+
+h1 {
+	font-size: 2em;
+	margin-bottom: 10px;
+	text-align: right;
+}
  
 #form {
 	position: absolute;
 	top: 20px;
 	left: 20px;
 	width: 400px;
-	padding: 20px;
-  z-index: 9999;
+	padding: 20px;  z-index: 9999;
 }
 
 #title {
-	width: 390px;
+	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
 	display: block;
@@ -28,7 +37,20 @@
 }
 
 label {
-	font-weight: bold;
+	font-weight: bold;}
+
+#save-template {
+	float: right;
+}
+
+#load-template {
+	float: right;
+	margin-right: 5px;
+}
+
+#clear-form {
+	float: left;
+	margin-left: 5px;
 }
 
 #form button {
@@ -36,6 +58,7 @@ label {
 	margin-right: auto;
 	width: 150px;
 	display: block;
+	margin-top: 10px;
 }
 
 #showPane {
@@ -78,4 +101,9 @@ label {
 	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000')";
 	/* For IE 5.5 - 7 */
 	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');
+}
+
+.cleditorMain {
+	margin-top: 3px;
+	margin-bottom: 5px;
 }
